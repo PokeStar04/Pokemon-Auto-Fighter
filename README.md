@@ -1,4 +1,6 @@
-# Node.js Express API Example + Fetch
+# Pokdmon Auto Fighter
+
+### ReactJS - Node.js Express API
 
 ## Dependencies
 
@@ -29,10 +31,12 @@ To install them, run:
 
 ## Database Setup
 
-node databasesetup/dbCreate.js
-node databasesetup/dbTables.js
-node databasesetup/dbMigrations.js  
-node databasesetup/dbMigrationEncounter.js
+Respect order to seutp DB.
+
+- `node databasesetup/dbCreate.js`
+- `node databasesetup/dbTables.js`
+- `node databasesetup/dbMigrations.js  `
+- `node databasesetup/dbMigrationEncounter.js`
 
 ## Run the server
 
