@@ -10,6 +10,7 @@ const pokemonRoutes = require('./routes/pokemonRoutes.js'); // Assurez-vous du b
 const summonRoutes = require('./routes/summonRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
 const userRoutes = require('./routes/userRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
 const pokemonInventoryRoutes = require('./routes/pokemonInventoryRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+const pokemonTeamRoutes = require('./routes/pokemonTeamRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
 
 
 
@@ -28,10 +29,7 @@ app.use(
   })
 );
 
-// Shows a "hello world" on the default link
-app.get("/", function (req, res) {
-  res.send("Hello World");
-});
+
 
 // Shows an "ok" message on the default database link
 app.get("/db", (req, res) => {
@@ -40,7 +38,6 @@ app.get("/db", (req, res) => {
 
 
 
-// Utilisez les routes définies dans dungeonRoutes
 app.use('/dungeons', dungeonRoutes);
 app.use('/stages', stageRoutes);
 app.use('/encounters', encounterRoutes);
@@ -49,6 +46,7 @@ app.use('/pokemon', pokemonRoutes);
 app.use('/summon', summonRoutes);
 app.use('/user', userRoutes);
 app.use('/pokemonInventory', pokemonInventoryRoutes);
+app.use('/pokemonTeam', pokemonTeamRoutes);
 
 
 

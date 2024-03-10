@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const SummonScreen = () => {
-  const [pokemonId, setPokemonId] = useState(3);
+  const [pokemonId, setPokemonId] = useState(6);
   const [pokemonStats, setPokemonStats] = useState(null);
   const [userGold, setUserGold] = useState(0);
 
@@ -98,7 +98,7 @@ const SummonScreen = () => {
       {pokemonStats && (
         <div>
           <h2>Statistiques du Pokémon invoqué :</h2>
-          {/* Affichez les statistiques du Pokémon ici */}
+          <img src={pokemonStats[0].frontSprite} alt="Pokemon Sprite" />
           <pre>{JSON.stringify(pokemonStats, null, 2)}</pre>
         </div>
       )}
