@@ -7,7 +7,6 @@ import StageScreen from '../StageScreen/StageScreen';
 const GameContainer = () => {
   const [currentScreen, setCurrentScreen] = useState('DungeonsChoice');
   const [selectedDungeonId, setSelectedDungeonId] = useState(null);
-
   const changeScreen = (screen, dungeonId = null, stageId = null) => {
     setCurrentScreen(screen);
     if (dungeonId !== null) {
@@ -17,7 +16,6 @@ const GameContainer = () => {
     console.log('Current Screen:', currentScreen);
     console.log('Selected Dungeon ID:', selectedDungeonId);
   };
-
   return (
     <div>
       {currentScreen === 'DungeonsChoice' && (

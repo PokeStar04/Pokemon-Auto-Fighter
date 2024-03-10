@@ -7,27 +7,27 @@ const DungeonsChoice = ({ changeScreen }) => {
   const [dungeons, setDungeons] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/dungeons')
-      .then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3001/dungeons');
         setDungeons(response.data.data);
-        setLoading(false); // Marque le chargement comme terminé une fois les données reçues
-      })
-      .catch((error) => {
+        setLoading(false);
+      } catch (error) {
         console.error('Error while fetching dungeons: ', error);
-        setLoading(false); // Marque le chargement comme terminé en cas d'erreur
-      });
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const handleDungeonClick = (id) => {
-    setLoading(true); // Affiche l'écran de chargement au moment du clic
+    setLoading(true);
     console.log(`Dungeon clicked: ${id}`);
 
-    // Simulez une tâche asynchrone avant de naviguer vers la nouvelle route
     setTimeout(() => {
-      // Utilisez history.push une fois que la tâche asynchrone est terminée
       changeScreen('StageChoice', id);
-    }, 1000); // Exemple de délai de 1 seconde (remplacez cela par votre logique de chargement réelle)
+    }, 1000);
   };
 
   return (

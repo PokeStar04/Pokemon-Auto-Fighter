@@ -54,6 +54,19 @@ loginDB.connect(function (err) {
     if (err) throw err;
     console.log("Encounters créés");
   })
+  let user = [
+    ["pokestar", 1, 1000, 1]
+  ];
+
+  let users = `
+    INSERT INTO User (userName, idTeam, gold, inventory) VALUES ?
+  `;
+
+  loginDB.query(users, [user], function (err, result) {
+    if (err) throw err;
+    console.log("User créés");
+  });
+
   // Import API (tous les pokemon)
   // For de 0 à 1025 for maVar = 0; maVar < 1025
 
@@ -61,6 +74,7 @@ loginDB.connect(function (err) {
   let type1 = "";
   let type2 = "";
   let hp = 0;
+  let maxHp = 0;
   let attack = 0;
   let defence = 0;
   let specialAttack = 0;
@@ -74,7 +88,6 @@ loginDB.connect(function (err) {
   for (let pokemonCurrentIndex = 1; pokemonCurrentIndex < 8; pokemonCurrentIndex++) {
     getPokemonDataById(pokemonCurrentIndex)
       .then(pokemonData => {
-        console.log(pokemonData.name);
         name = pokemonData.name;
         type1 = pokemonData.types[0].type.name;
         if (pokemonData.types[1] && pokemonData.types[1].type) {
@@ -83,6 +96,7 @@ loginDB.connect(function (err) {
           type2 = "none";
         }
         hp = pokemonData.stats[0].base_stat;
+        maxHp = pokemonData.stats[0].base_stat;
         attack = pokemonData.stats[1].base_stat;
         defence = pokemonData.stats[2].base_stat;
         specialAttack = pokemonData.stats[3].base_stat;
@@ -92,10 +106,8 @@ loginDB.connect(function (err) {
         rarity = hp + attack + defence + specialAttack + specialDefence + speed;
         frontSprite = pokemonData.sprites.front_default;
         backSprite = pokemonData.sprites.back_default;
-        console.log(pokemonData);
-        console.log(frontSprite, backSprite);
-        let sql = "INSERT INTO Pokemon (name, type1, type2, hp, attack, defence, specialAttack, specialDefence, speed, experience, rarity, frontSprite, backSprite) VALUES ?";
-        let pokemonDataToSend = [[name, type1, type2, hp, attack, defence, specialAttack, specialDefence, speed, experience, rarity, frontSprite, backSprite]];
+        let sql = "INSERT INTO Pokemon (name, type1, type2, hp,maxHp, attack, defence, specialAttack, specialDefence, speed, experience, rarity, frontSprite, backSprite) VALUES ?";
+        let pokemonDataToSend = [[name, type1, type2, hp, maxHp, attack, defence, specialAttack, specialDefence, speed, experience, rarity, frontSprite, backSprite]];
         loginDB.query(sql, [pokemonDataToSend], function (err, result) {
           if (err) throw err;
           console.log("Pokemon créé");

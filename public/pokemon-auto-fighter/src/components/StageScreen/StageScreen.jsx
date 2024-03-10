@@ -1,7 +1,6 @@
-// StageScreen.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useGlobalState } from '../../GlobalState'; // Assurez-vous de spécifier le bon chemin
+import { useGlobalState } from '../../GlobalState';
 import Encounter from './Encouter/Encounter';
 const StageScreen = () => {
   const { stageId } = useGlobalState();
