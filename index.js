@@ -7,6 +7,9 @@ const stageRoutes = require('./routes/stageRoutes.js');
 const encounterRoutes = require('./routes/encounterRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
 const pokemonEncounterRoutes = require('./routes/pokemonEncounterRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
 const pokemonRoutes = require('./routes/pokemonRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+const summonRoutes = require('./routes/summonRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+const userRoutes = require('./routes/userRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+const pokemonInventoryRoutes = require('./routes/pokemonInventoryRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
 
 
 
@@ -43,6 +46,10 @@ app.use('/stages', stageRoutes);
 app.use('/encounters', encounterRoutes);
 app.use('/pokemonEncounters', pokemonEncounterRoutes);
 app.use('/pokemon', pokemonRoutes);
+app.use('/summon', summonRoutes);
+app.use('/user', userRoutes);
+app.use('/pokemonInventory', pokemonInventoryRoutes);
+
 
 
 

@@ -1,12 +1,14 @@
 import React from 'react';
+import ButtonChoiceMainActivity from '../ui/navigation/ButtonChoiceMainActivity/ButtonChoiceMainActivity';
 
 const HomeHUD = () => {
   return (
     <div>
-      <h1>Vive</h1>
-      <button>Jouer</button>
-
-      <button>Charger une partie</button>
+      <div className="mx-8 flex justify-between ">
+        <ButtonChoiceMainActivity btnName="Summon" destination="/summon" />
+        <ButtonChoiceMainActivity btnName="Dungeon" destination="/dungeon" />
+        <ButtonChoiceMainActivity btnName="Team" destination="/team" />
+      </div>
     </div>
   );
 };

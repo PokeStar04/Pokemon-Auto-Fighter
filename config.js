@@ -6,7 +6,6 @@ const config = {
     password: "root",
     database: "dbPokemonAutoFighter",
     port: 8889,
-    dialect: 'mysql',
   },
   dbVanilla: {
     /* don't expose password or any sensitive info, done only for demo */
