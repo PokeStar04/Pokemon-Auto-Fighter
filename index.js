@@ -2,7 +2,16 @@ const express = require("express");
 const cors = require("cors");
 const app = express();
 const port = 3001;
-const charactersRouter = require("./routes/characters");
+const dungeonRoutes = require('./routes/dungeonRoutes.js');
+const stageRoutes = require('./routes/stageRoutes.js');
+const encounterRoutes = require('./routes/encounterRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+const pokemonEncounterRoutes = require('./routes/pokemonEncounterRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+const pokemonRoutes = require('./routes/pokemonRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+const summonRoutes = require('./routes/summonRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+const userRoutes = require('./routes/userRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+const pokemonInventoryRoutes = require('./routes/pokemonInventoryRoutes.js'); // Assurez-vous du bon chemin vers votre fichier encounterRoutes
+
+
 
 const corsOptions = {
   origin: "*",
@@ -12,7 +21,6 @@ const corsOptions = {
 
 // Use this after the variable declaration
 app.use(cors(corsOptions));
-
 app.use(express.json());
 app.use(
   express.urlencoded({
@@ -30,8 +38,26 @@ app.get("/db", (req, res) => {
   res.json({ message: "ok" });
 });
 
-// Used to visualize the "characters" table
-app.use("/characters", charactersRouter);
+
+
+// Utilisez les routes définies dans dungeonRoutes
+app.use('/dungeons', dungeonRoutes);
+app.use('/stages', stageRoutes);
+app.use('/encounters', encounterRoutes);
+app.use('/pokemonEncounters', pokemonEncounterRoutes);
+app.use('/pokemon', pokemonRoutes);
+app.use('/summon', summonRoutes);
+app.use('/user', userRoutes);
+app.use('/pokemonInventory', pokemonInventoryRoutes);
+
+
+
+
+
+
+
+
+
 
 /* Error handler middleware */
 app.use((err, req, res, next) => {
@@ -40,6 +66,17 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({ message: err.message });
   return;
 });
+
+
+
+
+
+
+
+
+
+
+
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
