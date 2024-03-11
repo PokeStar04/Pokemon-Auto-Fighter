@@ -13,8 +13,17 @@ async function getPokemonDataById(id) {
     const data = helper.emptyOrRows(rows);
     return data;
 }
+async function getPokemonByRarityRange(minRarity, maxRarity) {
+    const rows = await db.query(`SELECT * FROM Pokemon WHERE rarity >= ? AND rarity <= ?`, [minRarity, maxRarity]);
+    const data = helper.emptyOrRows(rows);
+    return data;
+}
+
+
+
 
 module.exports = {
     getAllPokemonData,
-    getPokemonDataById
+    getPokemonDataById,
+    getPokemonByRarityRange
 };

@@ -15,7 +15,20 @@ const pokemonTeamController = {
     getPokemonTeamByTeamId: async (req, res, next) => {
         try {
             const { idTeam, idUser } = req.params;
+
             const result = await pokemonTeamService.getPokemonTeamByTeamId(idTeam, idUser);
+            res.json(result);
+        } catch (err) {
+            console.error('Error while getting Pokemon team ', err.message);
+            next(err);
+        }
+    },
+    getPokemonTeamByUserId: async (req, res, next) => {
+        try {
+
+            const { idUser } = req.params;
+
+            const result = await pokemonTeamService.getPokemonTeamByUserId(idUser);
             res.json(result);
         } catch (err) {
             console.error('Error while getting Pokemon team ', err.message);

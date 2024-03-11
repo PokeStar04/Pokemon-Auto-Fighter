@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 
-const LifeSpeedBar = ({ maxHp, hp, speed, onDead, onAttack }) => {
+const LifeSpeedBar = ({
+  maxHp,
+  hp,
+  speed,
+  onDead,
+  onAttack,
+  decreaseEnemyPokemonHp,
+}) => {
   const [lifeWidth, setLifeWidth] = useState((hp / maxHp) * 100);
-  const [speedWidth, setSpeedWidth] = useState((speed / 100) * 30); // Utilise une formule pour définir la largeur initiale
+  const [speedWidth, setSpeedWidth] = useState((speed / 100) * 30);
 
   useEffect(() => {
     setLifeWidth((hp / maxHp) * 100);
@@ -20,13 +27,18 @@ const LifeSpeedBar = ({ maxHp, hp, speed, onDead, onAttack }) => {
         }
         if (newSpeed >= 100) {
           onAttack();
+          // decreaseEnemyPokemonHp();
+          {
+            /* Ajoutez cette ligne */
+          }
           return newSpeed % 100;
         }
       });
-    }, 1000); // Interval d'une seconde
+    }, 1000);
 
-    return () => clearInterval(intervalId); // Nettoie l'intervalle lors du démontage du composant
+    return () => clearInterval(intervalId);
   }, []);
+
   return (
     <div className="relative w-24 h-6 bg-gray-200 border border-black overflow-hidden">
       <div

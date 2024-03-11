@@ -1,36 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import LifeSpeedBar from '../../../ui/fightUi/LifeSpeedBar/LifeSpeedBar';
 
-const ShowPokemonBattle = ({ pokemonInstance, handleAttack }) => {
+const ShowPokemonBattle = ({
+  pokemonInstance,
+  handleAttack,
+  decreaseEnemyPokemonHp,
+  hp,
+}) => {
   const { speed } = pokemonInstance;
-  const pokemonInstanceSlot = pokemonInstance.slot;
-  const [hp, setHp] = useState(pokemonInstance.hp);
+  const pokemonInstanceSlot = [pokemonInstance.slot, pokemonInstance.isAlly];
+  // const pokemonInstanceIsAlly = pokemonInstance.isAlly;
+  // const instanceData = [pokemonInstanceSlot, pokemonInstanceIsAlly];
 
-  const decreaseHp = (amount) => {
-    setHp((prevHp) => {
-      const newHp = Math.max(prevHp - amount, 0);
-      return newHp;
-    });
-  };
-
-  useEffect(() => {
-    // Decrease HP periodically (every 1000 milliseconds)
-
-    const hpInterval = setInterval(() => {
-      decreaseHp(9); // Decrease HP by 10, adjust as needed
-    }, 2000);
-    return () => clearInterval(hpInterval);
-  }, []);
-  // const handleAttackClick = () => {
-  //   handleAttack(pokemonInstance.slot);
-  //   // Vous pouvez également appeler applyDamage directement ici si nécessaire
-  // };
+  //const [hp, setHp] = useState(pokemonInstance.hp);
 
   const [isPokemonDead, setIsPokemonDead] = useState(false);
 
   const handlePokemonDead = () => {
-    //console.log('Pokemon is dead!');
-
     setIsPokemonDead(true);
   };
 
@@ -43,6 +29,7 @@ const ShowPokemonBattle = ({ pokemonInstance, handleAttack }) => {
   if (isPokemonDead) {
     return null;
   }
+
   return (
     <div className="pokemon-battle-container">
       {!isPokemonDead && (
@@ -52,8 +39,10 @@ const ShowPokemonBattle = ({ pokemonInstance, handleAttack }) => {
             hp={hp}
             speed={speed}
             onDead={handlePokemonDead}
-            onAttack={() => handleAttack(pokemonInstance.slot)}
-            //onAttack={handleAttackClick}
+            onAttack={() => {
+              handleAttack(pokemonInstanceSlot);
+              decreaseEnemyPokemonHp(); // Appeler la fonction reçue en tant que prop
+            }} // Assurez-vous d'inclure cette ligne
           />
           <img
             className="pokemon-image"

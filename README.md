@@ -31,7 +31,7 @@ To install them, run:
 
 ## Database Setup
 
-Respect order to seutp DB.
+Respect order to setup DB.
 
 - `node databasesetup/dbCreate.js`
 - `node databasesetup/dbTables.js`

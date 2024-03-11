@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const SummonScreen = () => {
-  const [pokemonId, setPokemonId] = useState(6);
+  const [pokemonId, setPokemonId] = useState(null);
   const [pokemonStats, setPokemonStats] = useState(null);
   const [userGold, setUserGold] = useState(0);
 
@@ -29,7 +29,33 @@ const SummonScreen = () => {
     fetchUserGold();
   }, []);
 
-  const handleSummonClick = async () => {
+  const handleSummonClick = async (minRarity, maxRarity) => {
+    // try {
+    // const getPokemon = await fetch(
+    //   `http://localhost:3001/pokemon`,
+    // );
+    // if (response.ok) {
+    //   const result = await response.json();
+    //   setPokemonStats(result);
+    // }
+    console.log(minRarity);
+    console.log(maxRarity);
+    const response = await fetch(
+      `http://localhost:3001/pokemon/rarity/${minRarity}/${maxRarity}`,
+    );
+    if (response.ok) {
+      const result = await response.json();
+      console.log(JSON.stringify(result, null, 2)); // Affiche le résultat de manière lisible
+      const randomIndex = Math.floor(Math.random() * result.length);
+      const randomPokemon = result[randomIndex];
+
+      console.log('Pokémon aléatoire:', randomPokemon.id);
+      setPokemonId(randomPokemon.id);
+    } else {
+      console.error('Erreur lors de la requête fetch:', response.status);
+    }
+    // Supposez que 'result' soit votre tableau de résultats
+
     if (pokemonId && userGold >= 100) {
       try {
         // Vérifier la quantité d'or de l'utilisateur
@@ -92,7 +118,15 @@ const SummonScreen = () => {
           value={pokemonId || ''}
           onChange={(e) => setPokemonId(e.target.value)}
         />
-        <button onClick={handleSummonClick}>Invoquer Pokémon</button>
+        <button onClick={() => handleSummonClick(300, 400)}>
+          Invoquer Pokémon (Rareté 300-400)
+        </button>
+        <button onClick={() => handleSummonClick(400, 500)}>
+          Invoquer Pokémon (Rareté 400-500)
+        </button>
+        <button onClick={() => handleSummonClick(500, 600)}>
+          Invoquer Pokémon (Rareté 500-600)
+        </button>
       </div>
 
       {pokemonStats && (

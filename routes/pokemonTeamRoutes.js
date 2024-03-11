@@ -8,5 +8,6 @@ router.post('/add', pokemonTeamController.addPokemonInPokemonTeam);
 
 // Route to get Pokemon team by team ID and user ID
 router.get('/:idTeam/:idUser', pokemonTeamController.getPokemonTeamByTeamId);
+router.get('/:idUser', pokemonTeamController.getPokemonTeamByUserId);
 
 module.exports = router;
