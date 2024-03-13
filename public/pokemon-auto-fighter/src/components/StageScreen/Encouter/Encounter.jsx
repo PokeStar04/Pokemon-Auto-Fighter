@@ -11,113 +11,187 @@ const Encounter = ({ encountersData, userPokemonTeam }) => {
     setPokemonInstancesForCurrentEncounter,
   ] = useState([]);
   const [pokemonUserTeam, setPokemonUserTeam] = useState([]);
-  const [pokemonInstancesForUserTeam, setPokemonInstancesForTeam] = useState(
-    [],
-  );
+  const [pokemonInstancesForUserTeam, setPokemonInstancesForUserTeam] =
+    useState([]);
 
-  // const handleAttack = (instanceData) => {
-  //   const pokemonInstanceSlot = instanceData[0];
-  //   const pokemonInstanceIsAlly = instanceData[1];
+  function calculateMaxHp(baseHp) {
+    return Math.round(((31 + 2 * baseHp + 255 / 4) * 50) / 100 + 10 + 10);
+  }
+  function calculateSimpleDamage(Niveau, Attaque, CC, Defense, Modificateur) {
+    const degatsInfliges = Math.round(
+      ((Niveau * Attaque * (1 + CC)) / (2 * Defense)) * Modificateur,
+    );
+    return degatsInfliges;
+  }
 
-  //   console.log(pokemonInstanceIsAlly);
-  //   const alivePokemonSlots = pokemonInstancesForCurrentEncounter
+  // const chooseRandomTarget = (
+  //   pokemonInstances,
+  //   pokemonInstancesForUserTeam,
+  // ) => {
+  //   console.log(pokemonInstancesForUserTeam);
+  //   const alivePokemonSlots = pokemonInstances
   //     .filter((pokemonInstance) => !pokemonInstance.isDead)
-  //     .map((pokemonInstance) => pokemonInstanceSlot);
-  //   console.log(`Slots des Pokémon en vie: ${alivePokemonSlots}`);
-  //   // Générez un nombre aléatoire pour choisir un slot parmi les Pokémon en vie
-  //   const randomPokemonSlot =
-  //     alivePokemonSlots[Math.floor(Math.random() * alivePokemonSlots.length)];
-  //   console.log(`Slot du Pokémon choisi aléatoirement: ${randomPokemonSlot}`);
-  //   // Appliquez les dégâts au Pokémon choisi aléatoirement
-  //   // const pokemonHp = pokemonInstancesForCurrentEncounter[randomPokemonSlot].hp;
-  //   // const pokemonHpp = pokemonInstancesForCurrentEncounter[randomPokemonSlot];
-  //   // console.log('HP : ' + pokemonHp);
-  //   // const pokemonHp = pokemonInstancesForCurrentEncounter[randomPokemonSlot].hp;
+  //     .map((pokemonInstance) => pokemonInstance.slot);
 
-  //   // applyDamage(randomPokemonSlot, 20); // 20 est la quantité de dégâts, ajustez selon vos besoins
+  //   console.log({
+  //     alivePokemonSlots: alivePokemonSlots,
+  //     pokemonInstancesForUserTeam: pokemonInstancesForUserTeam,
+  //   });
+
+  //   if (alivePokemonSlots.length > 0) {
+  //     // Choisissez un slot de manière aléatoire parmi les Pokémon en vie
+  //     const randomPokemonSlot =
+  //       alivePokemonSlots[Math.floor(Math.random() * alivePokemonSlots.length)];
+
+  //     return {
+  //       target: randomPokemonSlot, // Utilisez directement le slot aléatoire
+  //       isTargetAlive: true,
+  //     };
+  //   } else {
+  //     return {
+  //       target: null,
+  //       isTargetAlive: false,
+  //     };
+  //   }
   // };
 
-  const decreaseEnemyPokemonHp = (pokemonSlot, damageAmount) => {
-    setPokemonInstancesForCurrentEncounter((prevPokemonInstances) => {
-      const updatedPokemonInstances = [...prevPokemonInstances];
-      const pokemonIndex = updatedPokemonInstances.findIndex(
-        (pokemonInstance) => pokemonInstance.slot === pokemonSlot,
+  const updateHpForEnemyInstance = (enemyTarget, updatedHp) => {
+    setPokemonInstancesForCurrentEncounter((prevState) => {
+      const updatedInstances = prevState.map((pokemonInstance) =>
+        pokemonInstance.slot === enemyTarget
+          ? { ...pokemonInstance, hp: updatedHp }
+          : pokemonInstance,
       );
+      //console.log('After Update:', JSON.stringify(updatedInstances));
 
-      if (pokemonIndex !== -1) {
-        const currentHP = updatedPokemonInstances[pokemonIndex].hp;
-        const newHP = Math.max(currentHP - damageAmount, 0);
-        updatedPokemonInstances[pokemonIndex] = {
-          ...updatedPokemonInstances[pokemonIndex],
-          hp: newHP,
-        };
-      }
-
-      return updatedPokemonInstances;
+      return updatedInstances;
     });
   };
 
-  const handleAttack = (instanceData) => {
-    const pokemonInstanceSlot = instanceData[0];
-    const pokemonInstanceIsAlly = instanceData[1];
+  const updateHpForUserInstance = (enemyTarget, updatedHp) => {
+    setPokemonInstancesForUserTeam((prevState) => {
+      const updatedInstances = prevState.map((pokemonInstance) =>
+        pokemonInstance.slot === enemyTarget
+          ? { ...pokemonInstance, hp: updatedHp }
+          : pokemonInstance,
+      );
+      // console.log('After Update:', JSON.stringify(updatedInstances));
 
-    console.log(`Attack! Pokemon Slot: ${pokemonInstanceSlot}`);
-
-    // Check if the instance is an ally or enemy to target
-    if (pokemonInstanceIsAlly) {
-      // Get slots of enemy Pokémon that are alive
-      const alivePokemonSlots = pokemonInstancesForCurrentEncounter
-        .filter((pokemonInstance) => !pokemonInstance.isDead)
-        .map((pokemonInstance) => pokemonInstance.slot);
-
-      if (alivePokemonSlots.length > 0) {
-        // Choose a random slot among the alive enemy Pokémon
-        const randomPokemonSlot =
-          alivePokemonSlots[
-            Math.floor(Math.random() * alivePokemonSlots.length)
-          ];
-        decreaseEnemyPokemonHp(randomPokemonSlot, 10); // Adjust the amount as needed
-      } else {
-        console.log('No alive enemy Pokémon to attack!');
-        // Handle the case where there are no alive enemy Pokémon
-      }
-    }
-
-    // Add the rest of your logic...
-
-    // Générez un nombre aléatoire pour choisir un slot parmi les Pokémon en vie
-    // const randomPokemonSlot =
-    //   alivePokemonSlots[Math.floor(Math.random() * alivePokemonSlots.length)];
-    // console.log(`Slot du Pokémon choisi aléatoirement: ${randomPokemonSlot}`);
-    // // Appliquez les dégâts au Pokémon choisi aléatoirement
-    // const pokemonHp = pokemonInstancesForCurrentEncounter[randomPokemonSlot].hp;
-    // const pokemonHpp = pokemonInstancesForCurrentEncounter[randomPokemonSlot];
-    // console.log('HP : ' + pokemonHp);
-    // const pokemonHp = pokemonInstancesForCurrentEncounter[randomPokemonSlot].hp;
-
-    // applyDamage(randomPokemonSlot, 20); // 20 est la quantité de dégâts, ajustez selon vos besoins
+      return updatedInstances;
+    });
   };
 
-  // const applyDamage = (pokemonSlot, damageAmount) => {
-  //   setPokemonInstancesForCurrentEncounter((prevPokemonInstances) => {
-  //     const updatedPokemonInstances = [...prevPokemonInstances];
-  //     const pokemonIndex = updatedPokemonInstances.findIndex(
-  //       (pokemonInstance) => pokemonInstance.slot === pokemonSlot,
-  //     );
+  const chooseRandomTarget = (pokemonInstances) => {
+    //console.log({ pokemonInstances: pokemonInstances });
+    const alivePokemonSlots = pokemonInstances
+      .filter((pokemonInstance) => !pokemonInstance.isDead)
+      .map((pokemonInstance) => pokemonInstance.slot);
 
-  //     // if (pokemonIndex !== -1) {
-  //     //   const currentHP = updatedPokemonInstances[pokemonIndex].hp;
-  //     //   const newHP = Math.max(currentHP - damageAmount, 0);
-  //     //   updatedPokemonInstances[pokemonIndex] = {
-  //     //     ...updatedPokemonInstances[pokemonIndex],
-  //     //     hp: newHP,
-  //     //   };
-  //     // }
+    if (alivePokemonSlots.length > 0) {
+      // Choisissez un slot de manière aléatoire parmi les Pokémon en vie
+      const randomPokemonSlot =
+        alivePokemonSlots[Math.floor(Math.random() * alivePokemonSlots.length)];
 
-  //     return updatedPokemonInstances;
-  //   });
-  // };
+      return {
+        target: randomPokemonSlot, // Utilisez directement le slot aléatoire
+        isTargetAlive: true,
+      };
+    } else {
+      return {
+        target: null,
+        isTargetAlive: false,
+      };
+    }
+  };
+  const handleAttack = (instanceData) => {
+    console.log({ pokemonInstancesForUserTeam });
+    //console.log({ instanceData: instanceData });
+    const pokemonInstanceSlot = instanceData[0];
+    const pokemonInstanceIsAlly = instanceData[1];
+    //console.log(pokemonInstancesForUserTeam);
+    // pokemonInstancesForUserTeam.forEach((pokemonUserInstance, index) => {
+    //   console.log(`Pokemon ${index + 1} (Ally):`, pokemonUserInstance);
+    // });
+    // console.log('slot', pokemonInstanceSlot, 'Ally :', pokemonInstanceIsAlly);
 
+    // if (pokemonInstanceIsAlly) {
+    //   console.log('je suis un allié qui attaque');
+
+    //   pokemonInstancesForCurrentEncounter.forEach((pokemonInstance, index) => {
+    //     console.log(`Pokemon ${index + 1} (Ennemi):`, pokemonInstance);
+    //   });
+    // }
+
+    // if (pokemonInstanceIsAlly == false) {
+    //   console.log('je suis un ennemi qui attaque');
+
+    //   pokemonInstancesForUserTeam.forEach((pokemonUserInstance, index) => {
+    //     console.log(`Pokemon ${index + 1} (Enemie):`, pokemonUserInstance);
+    //   });
+    // }
+
+    const pokemonInstanceAttack = instanceData[2];
+    const pokemonInstanceHp = instanceData[3];
+
+    // const targetInfo = chooseRandomTarget(
+    //   pokemonInstanceIsAlly
+    //     ? pokemonInstancesForCurrentEncounter // Allié
+    //     : pokemonInstancesForUserTeam, // Ennemi
+    // );
+
+    const targetInfo = chooseRandomTarget(
+      pokemonInstanceIsAlly
+        ? pokemonInstancesForCurrentEncounter // Allié
+        : pokemonInstancesForUserTeam, // Ennemi
+    );
+    //const targetInfo = chooseRandomTarget(pokemonInstancesForUserTeam);
+
+    const targetTableau = pokemonInstanceIsAlly
+      ? pokemonInstancesForCurrentEncounter
+      : pokemonInstancesForUserTeam;
+
+    // console.log({
+    //   targetTableau: targetTableau,
+    //   pokemonInstanceIsAlly: pokemonInstanceIsAlly,
+    //   pokemonInstancesForUserTeam: pokemonInstancesForUserTeam,
+    // });
+    if (targetInfo.isTargetAlive) {
+      // console.log({ target: targetInfo.isTargetAlive });
+      const enemyTarget = targetInfo.target;
+      const enemyTargetData = pokemonInstanceIsAlly
+        ? pokemonInstancesForCurrentEncounter[enemyTarget] // Allié
+        : pokemonInstancesForUserTeam[enemyTarget]; // Ennemi
+
+      // console.log({ enemyTargetData: enemyTargetData });
+      const resultatSimple = calculateSimpleDamage(
+        50,
+        pokemonInstanceAttack,
+        0,
+        enemyTargetData.defence,
+        1,
+      );
+      const updatedHp =
+        pokemonInstancesForCurrentEncounter[enemyTarget].hp - resultatSimple;
+      // Mettez à jour l'état local
+      // console.log(pokemonInstanceIsAlly);
+      if (pokemonInstanceIsAlly) {
+        pokemonInstancesForCurrentEncounter[enemyTarget].hp = updatedHp;
+        if (pokemonInstancesForCurrentEncounter[enemyTarget].hp <= 0) {
+          pokemonInstancesForCurrentEncounter[enemyTarget].isDead = true;
+        }
+      } else {
+        console.log('Je sui un enemy je dois attaquer des grand mort');
+
+        // updateUserPokemonHp(2, updatedHp);
+      }
+    } else {
+      // console.log({ target: targetInfo.isTargetAlive });
+      // console.log({ pokemonInstancesForUserTeam: pokemonInstancesForUserTeam });
+
+      console.log('No alive enemy Pokémon to attack!');
+      // Gérer le cas où il n'y a pas de Pokémon ennemi en vie
+    }
+  };
   useEffect(() => {
     const fetchPokemonData = async () => {
       try {
@@ -168,6 +242,8 @@ const Encounter = ({ encountersData, userPokemonTeam }) => {
       currentPokemon.isDead = false;
       currentPokemon.slot = index;
       currentPokemon.isAlly = false;
+      currentPokemon.maxHp = calculateMaxHp(currentPokemon.maxHp);
+      currentPokemon.hp = calculateMaxHp(currentPokemon.hp);
       encounterPokemons.push(currentPokemon);
     });
 
@@ -185,21 +261,17 @@ const Encounter = ({ encountersData, userPokemonTeam }) => {
       setPokemonUserTeam([userTeamPokemonData]);
 
       // Affiche les données récupérées dans la console
-      console.log('User Team Pokemon Data:', userTeamPokemonData);
+      //  console.log('User Team Pokemon Data:', userTeamPokemonData);
     } catch (error) {
       console.error('Error while fetching Pokemon User Team data: ', error);
     }
   };
-
   useEffect(() => {
-    // Appeler la fonction fetchUserTeamPokemonData lors du chargement initial
     fetchUserTeamPokemonData();
   }, []);
 
-  // Déplacez le console.log ici pour vous assurer que les données sont correctement mises à jour
-  console.log('User Team Pokemon Data:', pokemonUserTeam);
   useEffect(() => {
-    setPokemonInstancesForTeam(
+    setPokemonInstancesForUserTeam(
       pokemonUserTeam[0]?.map(
         (data) =>
           new Pokemon(
@@ -226,11 +298,46 @@ const Encounter = ({ encountersData, userPokemonTeam }) => {
       currentPokemon.isDead = false;
       currentPokemon.slot = index;
       currentPokemon.isAlly = true;
+      currentPokemon.maxHp = calculateMaxHp(currentPokemon.maxHp);
+      currentPokemon.hp = calculateMaxHp(currentPokemon.hp);
       userTeamPokemons.push(currentPokemon);
     });
-    setPokemonInstancesForTeam(userTeamPokemons);
-  }, [pokemonUserTeam]); // Ajoutez pokemonUserTeam comme dépendance
-  console.log(pokemonInstancesForUserTeam);
+    setPokemonInstancesForUserTeam(userTeamPokemons);
+  }, [pokemonUserTeam]);
+
+  // useEffect(() => {
+  //   let userTeamPokemons = [];
+
+  //   pokemonUserTeam[0]?.forEach((data, index) => {
+  //     const currentPokemon = new Pokemon(
+  //       data.id,
+  //       data.name,
+  //       data.type1,
+  //       data.type2,
+  //       data.hp,
+  //       data.maxHp,
+  //       data.attack,
+  //       data.defence,
+  //       data.specialAttack,
+  //       data.specialDefence,
+  //       data.speed,
+  //       data.experience,
+  //       data.rarity,
+  //       data.frontSprite,
+  //       data.backSprite,
+  //     );
+
+  //     currentPokemon.isDead = false;
+  //     currentPokemon.slot = index;
+  //     currentPokemon.isAlly = true;
+  //     currentPokemon.maxHp = calculateMaxHp(currentPokemon.maxHp);
+  //     currentPokemon.hp = calculateMaxHp(currentPokemon.hp);
+
+  //     userTeamPokemons.push(currentPokemon);
+  //   });
+
+  //   setPokemonInstancesForUserTeam(userTeamPokemons);
+  // }, [pokemonUserTeam]);
 
   const handleNextStage = () => {
     setCurrentStage((prevStage) => prevStage + 1);
@@ -250,23 +357,16 @@ const Encounter = ({ encountersData, userPokemonTeam }) => {
                     handleAttack(pokemonInstanceSlot)
                   }
                   hp={pokemonInstance.hp}
-                  //decreaseEnemyPokemonHp={decreaseEnemyPokemonHp}
-                  decreaseEnemyPokemonHp={(pokemonSlot, damageAmount) => {
-                    // Implement your logic to decrease enemy Pokémon's HP here
-                    console.log(
-                      `Decrease HP of enemy Pokémon in slot ${pokemonSlot} by ${damageAmount}`,
-                    );
-                  }}
+                  updateHp={(updatedHp) =>
+                    updateHpForEnemyInstance(pokemonInstance.slot, updatedHp)
+                  }
                 />
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Colonne vide au centre */}
         <div className="col-span-1"></div>
-
-        {/* Pokémon ennemis à droite */}
         <div className="col-span-1">
           <ul className="flex flex-col items-start">
             {pokemonInstancesForCurrentEncounter.map(
@@ -277,15 +377,16 @@ const Encounter = ({ encountersData, userPokemonTeam }) => {
                     handleAttack={(pokemonInstanceSlot) =>
                       handleAttack(pokemonInstanceSlot)
                     }
-                    decreaseEnemyPokemonHp={decreaseEnemyPokemonHp}
+                    hp={pokemonInstance.hp}
+                    updateHp={(updatedHp) =>
+                      updateHpForUserInstance(pokemonInstance.slot, updatedHp)
+                    }
                   />
                 </li>
               ),
             )}
           </ul>
         </div>
-
-        {/* Bouton en bas */}
         <div className="col-span-3 flex justify-center mt-8">
           <button
             onClick={handleNextStage}

@@ -124,8 +124,11 @@ const SummonScreen = () => {
         <button onClick={() => handleSummonClick(400, 500)}>
           Invoquer Pokémon (Rareté 400-500)
         </button>
-        <button onClick={() => handleSummonClick(500, 600)}>
+        <button onClick={() => handleSummonClick(500, 560)}>
           Invoquer Pokémon (Rareté 500-600)
+        </button>
+        <button onClick={() => handleSummonClick(560, 700)}>
+          Invoquer Pokémon (Rareté 560-700)
         </button>
       </div>
 

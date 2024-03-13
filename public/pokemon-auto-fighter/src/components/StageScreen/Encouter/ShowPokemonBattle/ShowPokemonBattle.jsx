@@ -4,16 +4,16 @@ import LifeSpeedBar from '../../../ui/fightUi/LifeSpeedBar/LifeSpeedBar';
 const ShowPokemonBattle = ({
   pokemonInstance,
   handleAttack,
-  decreaseEnemyPokemonHp,
-  hp,
+  updatedHp, // Utilisez updatedHp au lieu de hp
 }) => {
   const { speed } = pokemonInstance;
-  const pokemonInstanceSlot = [pokemonInstance.slot, pokemonInstance.isAlly];
-  // const pokemonInstanceIsAlly = pokemonInstance.isAlly;
-  // const instanceData = [pokemonInstanceSlot, pokemonInstanceIsAlly];
-
-  //const [hp, setHp] = useState(pokemonInstance.hp);
-
+  const pokemonInstanceSlot = [
+    pokemonInstance.slot,
+    pokemonInstance.isAlly,
+    pokemonInstance.attack,
+    pokemonInstance.hp,
+  ];
+  console.log('La vie de mon instance : ' + pokemonInstance.hp);
   const [isPokemonDead, setIsPokemonDead] = useState(false);
 
   const handlePokemonDead = () => {
@@ -21,10 +21,25 @@ const ShowPokemonBattle = ({
   };
 
   useEffect(() => {
-    if (hp <= 0) {
+    // Mettez à jour l'état local lorsque updatedHp change
+    if (updatedHp <= 0) {
+      console.log('je suis mort ta mere');
       handlePokemonDead();
     }
-  }, [hp]);
+  }, [updatedHp]);
+  // useEffect(() => {
+  //   // Fonction de rappel pour setInterval
+  //   const intervalId = setInterval(() => {
+  //     // Mettez à jour l'état local ou effectuez d'autres actions ici
+  //     console.log(
+  //       'mes hp :',
+  //       pokemonInstance.hp + ' slot :' + pokemonInstance.slot,
+  //     );
+  //   }, 2000); // Intervalle de 2 secondes (2000 millisecondes)
+
+  //   // Nettoyer l'intervalle lors du démontage du composant
+  //   return () => clearInterval(intervalId);
+  // }, [pokemonInstance]);
 
   if (isPokemonDead) {
     return null;
@@ -36,13 +51,13 @@ const ShowPokemonBattle = ({
         <>
           <LifeSpeedBar
             maxHp={pokemonInstance.maxHp}
-            hp={hp}
+            hp={updatedHp}
             speed={speed}
             onDead={handlePokemonDead}
             onAttack={() => {
               handleAttack(pokemonInstanceSlot);
-              decreaseEnemyPokemonHp(); // Appeler la fonction reçue en tant que prop
-            }} // Assurez-vous d'inclure cette ligne
+            }}
+            updatedHp={updatedHp}
           />
           <img
             className="pokemon-image"

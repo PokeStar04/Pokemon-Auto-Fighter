@@ -13,7 +13,6 @@ async function getAllPokemonIdByEncounterId(idEncounter) {
     const data = helper.emptyOrRows(rows);
     return data;
 }
-
 module.exports = {
     getAllPokemonIdByEncounterId,
 };
