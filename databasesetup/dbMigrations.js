@@ -85,7 +85,7 @@ loginDB.connect(function (err) {
   let frontSprite = "";
   let backSprite = "";
 
-  for (let pokemonCurrentIndex = 1; pokemonCurrentIndex < 8; pokemonCurrentIndex++) {
+  for (let pokemonCurrentIndex = 1; pokemonCurrentIndex < 151; pokemonCurrentIndex++) {
     getPokemonDataById(pokemonCurrentIndex)
       .then(pokemonData => {
         name = pokemonData.name;

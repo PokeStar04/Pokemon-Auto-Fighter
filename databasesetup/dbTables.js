@@ -26,19 +26,8 @@ loginDB.connect(function (err) {
   `;
 
 
-  let Team = `
-  CREATE TABLE IF NOT EXISTS Team(
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    idUser INT,
-    isActive BOOLEAN
-  )
-`;
 
 
-  loginDB.query(Team, function (err, result) {
-    if (err) throw err;
-    console.log("Team table created");
-  });
 
 
 
@@ -46,15 +35,14 @@ loginDB.connect(function (err) {
   CREATE TABLE IF NOT EXISTS PokemonTeam(
       id INT AUTO_INCREMENT PRIMARY KEY,
       idTeam INT,
-      IdInventory INT,
-      slot INT
+      idPokemonInventory INT,
+      slot INT,
+      FOREIGN KEY (idPokemonInventory) REFERENCES PokemonInventory(id) ON DELETE CASCADE
+
     )
     `;
 
-  loginDB.query(pokemonInTeam, function (err, result) {
-    if (err) throw err;
-    console.log("PokemonTeam table created");
-  });
+
 
   let pokemonInventory = `
   CREATE TABLE IF NOT EXISTS PokemonInventory (
@@ -71,6 +59,26 @@ loginDB.connect(function (err) {
     console.log("pokemonInventory table created");
   });
 
+
+  let Team = `
+  CREATE TABLE IF NOT EXISTS Team(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idUser INT,
+    isActive BOOLEAN
+  )
+`;
+
+
+  loginDB.query(Team, function (err, result) {
+    if (err) throw err;
+    console.log("Team table created");
+  });
+
+
+  loginDB.query(pokemonInTeam, function (err, result) {
+    if (err) throw err;
+    console.log("PokemonTeam table created");
+  });
   let pokemonStats = `
 CREATE TABLE IF NOT EXISTS PokemonStat(
     id INT AUTO_INCREMENT PRIMARY KEY,

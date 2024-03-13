@@ -1,4 +1,6 @@
-# Node.js Express API Example + Fetch
+# Pokdmon Auto Fighter
+
+### ReactJS - Node.js Express API
 
 ## Dependencies
 
@@ -6,6 +8,22 @@
 - Mysql2
 - Cors
 - Express
+- Axios
+- Body-parser
+- Cookie-parser
+- Multer
+- Postcss
+- Postcss-cli
+- Postcss-preset-env
+- React
+- React-dnd
+- React-dnd-html5-backend
+- React-dom
+- React-router-dom
+- React-scripts
+- Sequelize
+- Tailwindcss
+- Web-vitals
 
 To install them, run:
 
@@ -13,7 +31,12 @@ To install them, run:
 
 ## Database Setup
 
-Run node [migrations name] inside the databaseSetup to create a database
+Respect order to setup DB.
+
+- `node databasesetup/dbCreate.js`
+- `node databasesetup/dbTables.js`
+- `node databasesetup/dbMigrations.js  `
+- `node databasesetup/dbMigrationEncounter.js`
 
 ## Run the server
 
@@ -23,11 +46,18 @@ Type in a terminal:
 
 It will host the database on port 3000 and the application on port 8081
 
-By default you have 3 routes
+By default you have 9 routes
 
-- Hello world on landing
 - Db check on /db
-- Characters fetch on /characters
+- dungeon fetch on /dungeon
+- encounter fetch on /encounter
+- pokemonEncounter fetch on /pokemonEncounter
+- pokemonInventory fetch on /pokemonInventory
+- pokemon fetch on /pokemon
+- pokemonTeam fetch on /pokemonTeam
+- stage fetch on /stage
+- summon fetch on /summon
+- user fetch on /user
 
 # Getting Started with Create React App
 

@@ -23,6 +23,27 @@ const pokemonController = {
             next(err);
         }
     },
+    getPokemonByRarityRange: async (req, res, next) => {
+        try {
+            // const minRarity = req.query.minRarity
+            // const maxRarity = req.query.maxRarity
+            const { minRarity } = req.params;
+            const { maxRarity } = req.params;
+
+
+
+            const pokemonInRange = await pokemonService.getPokemonByRarityRange(minRarity, maxRarity);
+
+            if (!pokemonInRange || pokemonInRange.length === 0) {
+                return res.status(404).send('No Pokémon found in the specified rarity range');
+            }
+
+            res.json(pokemonInRange);
+        } catch (err) {
+            console.error('Error while getting Pokémon by rarity range ', err.message);
+            next(err);
+        }
+    },
 };
 
 module.exports = pokemonController;

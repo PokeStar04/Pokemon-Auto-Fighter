@@ -5,5 +5,7 @@ const pokemonController = require('../controllers/pokemonController'); // Assure
 
 router.get('/', pokemonController.getAllPokemonData);
 router.get('/:id', pokemonController.getPokemonDataById);
+router.get('/rarity', pokemonController.getPokemonByRarityRange);
+router.get('/rarity/:minRarity/:maxRarity', pokemonController.getPokemonByRarityRange);
 
 module.exports = router;
